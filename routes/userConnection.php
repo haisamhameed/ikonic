@@ -6,6 +6,7 @@ use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConnectRequestController;
 
 Route::get('/received-requests', [ConnectRequestController::class, 'receivedRequests'])->name('received-requests');
+Route::post('/more-received-requests', [ConnectRequestController::class, 'getMoreReceivedRequests'])->name('user.more-received-requests');
 Route::post('/more-requests', [ConnectRequestController::class, 'getMoreRequests'])->name('user.more-requests');
 
 Route::resource('connect-request', ConnectRequestController::class);

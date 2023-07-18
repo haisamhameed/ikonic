@@ -63,13 +63,50 @@ class ConnectRequestController extends Controller
     }
     public function receivedRequests()
     {
-        $receiveRequest = auth()->user()->receivedConnectionRequests()->with('userSender')->get();
-        $response    = view('components.receive-request',compact('receiveRequest'))->render();
+        $loadMore       = 1;
+        $loadMorePage   = 1;
+        $page           = 1;
+        $perPage        = 10;
+        $offset         = ($page - 1) * $perPage;
+        $receiveRequest = auth()->user()->receivedConnectionRequests()
+                            ->with('userSender')
+                            ->skip($offset)
+                            ->take($perPage)
+                            ->get();
+        $response    = view('components.receive-request',compact('receiveRequest','loadMorePage'))->render();
         return response()->json([
             'content' => $response,
         ]); 
     }
+    public function getMoreReceivedRequests(Request $request)
+    {
+        $page           = 1;
+        $loadMorePage   = 0;
+        if($request->has('page'))
+        {
+            $page = $request->get('page');
+        }
+        $perPage    = 10;
+        $offset     = ($page - 1) * $perPage;
 
+        $totalRecords = auth()->user()->suggestions()->count();
+        $loadMore = 1;
+        if($perPage + $offset >=$totalRecords)
+        {
+            $loadMore = 0;
+        }
+        $receiveRequest = auth()->user()->receivedConnectionRequests()
+                            ->with('userSender')
+                            ->skip($offset)
+                            ->take($perPage)
+                            ->get();
+        $response    = view('components.receive-request',compact('receiveRequest','loadMorePage'))->render();
+        return response()->json([
+            'content' => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *

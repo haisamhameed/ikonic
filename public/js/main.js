@@ -36,6 +36,17 @@ function getReceivedRequests() {
   ajax('/received-requests', 'GET',functionsOnSuccess);
 }
 
+function getReceivedMoreRequests() {
+  var functionsOnSuccess = [
+    [successPaginationFunction, ['response','received_request_content']]
+  ];
+  var page = $('#load_more_btn').attr("data-page");
+  var form = ajaxForm([
+    ['page', page],
+  ]);
+  ajax('/more-received-requests', 'POST',functionsOnSuccess,form);
+}
+
 function getConnections() {
   var functionsOnSuccess = [
     [successFunction, ['response']]
