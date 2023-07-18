@@ -9,17 +9,17 @@
       </table>
       <div>
         <button style="width: 220px" id="get_connections_in_common_" class="btn btn-primary" type="button"
-          data-bs-toggle="collapse" data-bs-target="#collapse_" aria-expanded="false" aria-controls="collapseExample">
+          data-bs-toggle="collapse" data-bs-target="#collapse_{{ $connection->pivot->id }}" aria-expanded="false" aria-controls="collapseExample">
           Connections in common ({{ auth()->user()->connectionsInCommon($connection)->count() }})
         </button>
-        <button id="create_request_btn_" class="btn btn-danger me-1" onclick="removeConnection('{{ $connection->id }}')" >Remove Connection</button>
+        <button id="create_request_btn_" class="btn btn-danger me-1" onclick="removeConnection('{{ $connection->pivot->id }}')" >Remove Connection</button>
       </div>
 
     </div>
   @empty
     
   @endforelse
-  <div class="collapse" id="collapse_">
+  <div class="collapse" id="collapse_{{ $connection->pivot->id }}">
 
     <div id="content_" class="p-2">
       {{-- Display data here --}}

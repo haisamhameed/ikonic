@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     public function connections()
     {
-        return $this->belongsToMany(User::class, 'connections', 'user_id_1', 'user_id_2');
+        return $this->belongsToMany(User::class, 'connections', 'user_id_1', 'user_id_2')->withPivot('id');
     }
 
     public function connectionsInCommon(User $user)
