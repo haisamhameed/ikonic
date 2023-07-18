@@ -11,6 +11,7 @@ Route::post('/more-requests', [ConnectRequestController::class, 'getMoreRequests
 
 Route::resource('connect-request', ConnectRequestController::class);
 
+Route::post('/more-connections', [ConnectionController::class, 'getMoreConnections'])->name('user.more-connections');
 Route::resource('connections', ConnectionController::class);
 
 Route::get('/suggestions', [UserController::class, 'suggestions'])->name('user.suggestions');

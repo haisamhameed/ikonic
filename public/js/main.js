@@ -55,8 +55,14 @@ function getConnections() {
 }
 
 function getMoreConnections() {
-  // Optional: Depends on how you handle the "Load more"-Functionality
-  // your code here...
+  var functionsOnSuccess = [
+    [successPaginationFunction, ['response','connection_content']]
+  ];
+  var page = $('#load_more_btn').attr("data-page");
+  var form = ajaxForm([
+    ['page', page],
+  ]);
+  ajax('/more-connections', 'POST',functionsOnSuccess,form);
 }
 
 function getConnectionsInCommon(userId, connectionId) {

@@ -1,4 +1,4 @@
-<div class="my-2 shadow text-white bg-dark p-1" id="">
+<div class="my-2 shadow text-white bg-dark p-1" id="connection_content">
   @forelse ($connections as $connection)
     <div class="d-flex justify-content-between">
       <table class="ms-1">
@@ -19,6 +19,11 @@
   @empty
     
   @endforelse
+  @if($loadMorePage==1)
+  <div class="d-flex justify-content-center mt-2 py-3 {{-- d-none --}}" id="load_more_btn_parent">
+    <button class="btn btn-primary"  data-page="2" onclick="getReceivedMoreRequests()" id="load_more_btn">Load more</button>
+  </div>
+@endif
   <div class="collapse" id="collapse_{{ $connection->pivot->id }}">
 
     <div id="content_" class="p-2">

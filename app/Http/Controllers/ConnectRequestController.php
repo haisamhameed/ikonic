@@ -43,7 +43,7 @@ class ConnectRequestController extends Controller
         $perPage    = 10;
         $offset     = ($page - 1) * $perPage;
 
-        $totalRecords = auth()->user()->suggestions()->count();
+        $totalRecords = auth()->user()->sentConnectionRequests()->count();
         $loadMore = 1;
         if($perPage + $offset >=$totalRecords)
         {
@@ -89,7 +89,7 @@ class ConnectRequestController extends Controller
         $perPage    = 10;
         $offset     = ($page - 1) * $perPage;
 
-        $totalRecords = auth()->user()->suggestions()->count();
+        $totalRecords = auth()->user()->receivedConnectionRequests()->count();
         $loadMore = 1;
         if($perPage + $offset >=$totalRecords)
         {

@@ -15,12 +15,52 @@ class ConnectionController extends Controller
      */
     public function index()
     {
-        $connections = auth()->user()->connections()->get();
-        $response    = view('components.connection',compact('connections'))->render();
+        $loadMore       = 1;
+        $loadMorePage   = 1;
+        $page           = 1;
+        $perPage        = 10;
+        $offset         = ($page - 1) * $perPage;
+        $connections = auth()->user()->connections()
+                        ->skip($offset)
+                        ->take($perPage)
+                        ->get();
+        $response    = view('components.connection',compact('connections','loadMorePage'))->render();
         return response()->json([
             'content' => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
         ]); 
     }
+    
+    public function getMoreConnections(Request $request)
+    {
+        $page           = 1;
+        $loadMorePage   = 0;
+        if($request->has('page'))
+        {
+            $page = $request->get('page');
+        }
+        $perPage    = 10;
+        $offset     = ($page - 1) * $perPage;
+
+        $totalRecords = aauth()->user()->connections()->count();
+        $loadMore = 1;
+        if($perPage + $offset >=$totalRecords)
+        {
+            $loadMore = 0;
+        }
+        $users          = auth()->user()->connections()
+        ->skip($offset)
+        ->take($perPage)
+        ->get();
+        $response    = view('components.connection',compact('connections','loadMorePage'))->render();
+        return response()->json([
+            'content' => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
