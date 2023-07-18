@@ -80,7 +80,6 @@ function successFunction(response) {
   $('#content').html(response['content']);
 }
 function successPaginationFunction(response,id) {
-  console.log(response);
   $('#'+id).append(response['content']);
   // $('#load_more_btn').data('page',parseInt(response['page'])+1);
   $('#load_more_btn').attr('data-page',parseInt(response['page'])+1);

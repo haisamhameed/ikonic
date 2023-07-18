@@ -11,9 +11,15 @@ function getRequests(mode) {
   ajax('/connect-request', 'GET',functionsOnSuccess);
 }
 
-function getMoreRequests(mode) {
-  // Optional: Depends on how you handle the "Load more"-Functionality
-  // your code here...
+function getMoreRequests() {
+  var functionsOnSuccess = [
+    [successPaginationFunction, ['response','request_content']]
+  ];
+  var page = $('#load_more_btn').attr("data-page");
+  var form = ajaxForm([
+    ['page', page],
+  ]);
+  ajax('/more-requests', 'POST',functionsOnSuccess,form);
 }
 
 function getStats() {

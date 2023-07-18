@@ -15,13 +15,52 @@ class ConnectRequestController extends Controller
      */
     public function index()
     {
-        $sendRequest = auth()->user()->sentConnectionRequests()->with('userReceiver')->get();
-        $response    = view('components.request',compact('sendRequest'))->render();
+        $loadMore       = 1;
+        $loadMorePage   = 1;
+        $page           = 1;
+        $perPage        = 10;
+        $offset         = ($page - 1) * $perPage;
+        $sendRequest = auth()->user()->sentConnectionRequests()
+                        ->with('userReceiver')
+                        ->skip($offset)
+                        ->take($perPage)
+                        ->get();
+        $response    = view('components.request',compact('sendRequest','loadMorePage'))->render();
         return response()->json([
             'content' => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
         ]); 
     }
+    public function getMoreRequests(Request $request)
+    {
+        $page           = 1;
+        $loadMorePage   = 0;
+        if($request->has('page'))
+        {
+            $page = $request->get('page');
+        }
+        $perPage    = 10;
+        $offset     = ($page - 1) * $perPage;
 
+        $totalRecords = auth()->user()->suggestions()->count();
+        $loadMore = 1;
+        if($perPage + $offset >=$totalRecords)
+        {
+            $loadMore = 0;
+        }
+        $sendRequest = auth()->user()->sentConnectionRequests()
+                        ->with('userReceiver')
+                        ->skip($offset)
+                        ->take($perPage)
+                        ->get();
+        $response    = view('components.request',compact('sendRequest','loadMorePage'))->render();
+        return response()->json([
+            'content' => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
+        ]);
+    }
     public function receivedRequests()
     {
         $receiveRequest = auth()->user()->receivedConnectionRequests()->with('userSender')->get();
