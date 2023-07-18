@@ -1,4 +1,4 @@
-<div class="my-2 shadow  text-white bg-dark p-1" id="">
+<div class="my-2 shadow  text-white bg-dark p-1" id="suggestion_content">
   @forelse ($users as $user)
   <div class="d-flex justify-content-between">
     <table class="ms-1">
@@ -15,6 +15,8 @@
     
   @endforelse
 </div>
-<div class="d-flex justify-content-center mt-2 py-3 {{-- d-none --}}" id="load_more_btn_parent">
-  <button class="btn btn-primary" onclick="" id="load_more_btn">Load more</button>
-</div>
+@if($loadMorePage==1)
+  <div class="d-flex justify-content-center mt-2 py-3 {{-- d-none --}}" id="load_more_btn_parent">
+    <button class="btn btn-primary"  data-page="2" onclick="getMoreSuggestions()" id="load_more_btn">Load more</button>
+  </div>
+@endif

@@ -16,22 +16,50 @@ class UserController extends Controller
     }
     public function suggestions(Request $request)
     {
-        $page = 1;
-        if($request->has('page'))
-        {
-            $page = $request->get('page');
-        }
-        $perPage = 10;
-        $offset = ($page - 1) * $perPage;
-    
-        $users = auth()->user()->suggestions()
+        $loadMore       = 1;
+        $loadMorePage   = 1;
+        $page           = 1;
+        $perPage        = 10;
+        $offset         = ($page - 1) * $perPage;
+        $users          = auth()->user()->suggestions()
         ->skip($offset)
         ->take($perPage)
         ->get();
 
-        $response = view('components.suggestion',compact('users'))->render();
+        $response = view('components.suggestion',compact('users','loadMorePage'))->render();
         return response()->json([
-            'content' => $response,
+            'content'   => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
         ]);   
+    }
+
+    public function getMoreSuggestions(Request $request)
+    {
+        $page           = 1;
+        $loadMorePage   = 0;
+        if($request->has('page'))
+        {
+            $page = $request->get('page');
+        }
+        $perPage    = 10;
+        $offset     = ($page - 1) * $perPage;
+
+        $totalRecords = auth()->user()->suggestions()->count();
+        $loadMore = 1;
+        if($perPage + $offset >=$totalRecords)
+        {
+            $loadMore = 0;
+        }
+        $users          = auth()->user()->suggestions()
+        ->skip($offset)
+        ->take($perPage)
+        ->get();
+        $response = view('components.suggestion',compact('users','loadMorePage'))->render();
+        return response()->json([
+            'content'   => $response,
+            'page'      => $page,
+            'loadMore'  => $loadMore
+        ]);  
     }
 }

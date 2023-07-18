@@ -25,7 +25,6 @@ function ajax(url, method, functionsOnSuccess, form) {
   if (typeof form === 'undefined') {
     form = new FormData;
   }
-
   if (typeof functionsOnSuccess === 'undefined') {
     functionsOnSuccess = [];
   }
@@ -79,6 +78,16 @@ function successStatsFunction(response)
 }
 function successFunction(response) {
   $('#content').html(response['content']);
+}
+function successPaginationFunction(response,id) {
+  console.log(response);
+  $('#'+id).append(response['content']);
+  // $('#load_more_btn').data('page',parseInt(response['page'])+1);
+  $('#load_more_btn').attr('data-page',parseInt(response['page'])+1);
+  if(response['loadMore']==0)
+  {
+    $('#load_more_btn').hide();
+  }
 }
 function successSendRequest(response){
   if(response['status'])

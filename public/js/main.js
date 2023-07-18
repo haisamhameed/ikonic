@@ -55,12 +55,19 @@ function getSuggestions() {
   var functionsOnSuccess = [
     [successFunction, ['response']]
   ];
+  
   ajax('/suggestions', 'GET',functionsOnSuccess);
 }
 
 function getMoreSuggestions() {
-  // Optional: Depends on how you handle the "Load more"-Functionality
-  // your code here...
+  var functionsOnSuccess = [
+    [successPaginationFunction, ['response','suggestion_content']]
+  ];
+  var page = $('#load_more_btn').attr("data-page");
+  var form = ajaxForm([
+    ['page', page],
+  ]);
+  ajax('/more-suggestions', 'POST',functionsOnSuccess,form);
 }
 
 function sendRequest(suggestionId) {
